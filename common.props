@@ -1,0 +1,17 @@
+﻿<Project>
+  <PropertyGroup>
+    <LangVersion>9</LangVersion>
+    <Version>1.0.3</Version>
+    <VersionSuffix>$(VersionSuffix)</VersionSuffix>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
+    <!-- <NoWarn>$(NoWarn);CS1591;CS0436</NoWarn> -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <ToolCommandName>pomelo-cli</ToolCommandName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>PomeloCli.DemoPlugin</id>
+    <version>1.0.0</version>
+    <authors>leon</authors>
+    <description>description</description>
+  </metadata>
+  <files>
+    <file src="bin\Debug\net5.0\**" target="lib\net5.0" />
+    <file src="bin\Debug\netcoreapp3.1\**" target="lib\netcoreapp3.1" />
+  </files>
+</package>

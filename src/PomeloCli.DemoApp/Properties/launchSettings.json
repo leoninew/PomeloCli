@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "PomeloCli.DemoApp": {
+      "commandName": "Project",
+      "commandLineArgs": "-h",
+      "dotnetRunMessages": "true",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "debug",
+        "PC_NO_UPGRADE": "true",
+        "PC_NO_DIAGNOSIS": "true"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+.vs
+.vscode
+.idea
+.sonarqube
+
+global.json
+[bB]in
+[oO]bj
+appsettings.debug.json
+
+[lL]ogs
+TestResults
+nupkgs
+releases
+*.DotSettings.user
+
+*.log
