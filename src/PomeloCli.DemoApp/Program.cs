@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using PomeloCli.DemoApp.Commands;
+using PomeloCli.DemoApp.Diagnosis;
 using PomeloCli.Plugin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PomeloCli.DemoApp.Diagnosis;
 
 namespace PomeloCli.DemoApp {
     public class Program {
@@ -18,9 +18,7 @@ namespace PomeloCli.DemoApp {
         }
 
         private static IHostBuilder CreateHostBuilder(String[] args) {
-            var environment = Environment.GetEnvironmentVariable("DOTNET_ENV") 
-                ?? Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT")
-                ?? "Production";
+            var environment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
             return Host.CreateDefaultBuilder()
                 .ConfigureAppConfiguration((context, builder) => {
                     builder.Sources.Clear();
@@ -30,35 +28,32 @@ namespace PomeloCli.DemoApp {
                     builder.AddEnvironmentVariables("PC_");
                 })
                 .ConfigureLogging((context, builder) => {
+                    builder.AddConfiguration(context.Configuration.GetSection("Logging"));
                     builder.AddSimpleConsole(options => {
                         options.SingleLine = true;
                         options.IncludeScopes = false;
                         options.TimestampFormat = "[HH:mm:ss.fff] ";
                     });
-                    if (String.Equals(environment, "debug")) {
-                        builder.SetMinimumLevel(LogLevel.Debug);
-                    }
-                    else {
-                        builder.AddFilter("System", LogLevel.Warning);
-                        builder.AddFilter("Microsoft", LogLevel.Warning);
-                    }
                 })
                 .ConfigureServices((context, services) => {
                     var configuration = context.Configuration;
-                    services.AddSingleton(provider => new CommandLineConfigurationSource {
-                        Args = args
-                    });
+                    services.AddSingleton(provider => new CommandLineConfigurationSource { Args = args });
 
+                    // add plugin feature
+                    services.AddPluginSupport(context.Configuration);
+
+                    // add diagnostics feature
                     services.AddHttpClient();
                     services.AddOptions<DiagnosisOptions>()
                         .Bind(configuration.GetSection("Diagnosis"))
                         .ValidateDataAnnotations();
                     services.AddTransient<IDiagnosisService, DiagnosisService>();
 
-                    services.AddPluginSupport(context.Configuration);
-                    
+                    // add command hosting feature
                     services.AddTransient<ICommandService, CommandService>();
                     services.AddHostedService<ApplicationHostedService>();
+
+                    // add internal command
                     services.AddTransient<ICommand, VersionCommand>();
                 });
         }

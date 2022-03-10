@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using PomeloCli.DemoApp.Diagnosis;
@@ -45,7 +46,7 @@ namespace PomeloCli.DemoApp {
                 commandApp.Execute(_configurationSource.Args.ToArray());
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "command execute failed");
+                _logger.LogError("command execute failed, args: {Args}", JsonSerializer.Serialize(_configurationSource.Args));
                 exception = ex;
             }
 
