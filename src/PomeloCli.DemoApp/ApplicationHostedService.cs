@@ -61,6 +61,8 @@ namespace PomeloCli.DemoApp {
                 CommandOptionType.NoValue);
             commandApp.Option("--no-diagnosis", "disable diagnosis report, equals to env PC_NO_DIAGNOSIS=true",
                 CommandOptionType.NoValue);
+            commandApp.Option("--no-plugin", "disable plugin loading, equals to env PC_NO_PLUGIN=true",
+                CommandOptionType.NoValue);
         }
 
         private async Task CheckUpgradeSafelyAsync() {
