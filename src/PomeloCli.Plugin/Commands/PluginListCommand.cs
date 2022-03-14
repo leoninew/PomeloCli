@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 using PomeloCli.Plugin.Native;
 
 namespace PomeloCli.Plugin.Commands {
-    [Command("list", Parent = typeof(PluginCommand))]
-    class PluginListCommand : Command {
+    [Command("list")]
+    class PluginListCommand : Command<PluginCommand> {
         private readonly IPluginProvider _pluginProvider;
 
         public PluginListCommand(IPluginProvider pluginProvider) {

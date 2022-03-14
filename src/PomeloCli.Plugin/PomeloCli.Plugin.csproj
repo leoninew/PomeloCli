@@ -3,7 +3,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PomeloCli" Version="1.0.3" />
+    <!--<PackageReference Include="PomeloCli" Version="1.1.0" />--> 
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
@@ -21,6 +20,10 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="McMaster.NETCore.Plugins" Version="1.4.0" />
     <PackageReference Include="NuGet.Protocol" Version="5.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PomeloCli\PomeloCli.csproj" />
   </ItemGroup>
 
   <ItemGroup>

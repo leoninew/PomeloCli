@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.CommandLineUtils;
@@ -42,13 +43,17 @@ namespace PomeloCli {
         }
 
         private IEnumerable<ICommand> GetRootCommands() {
-            return _commands.Where(x => x is Command == false
-                || x is Command cmd && cmd.DeclareParent() == null);
+            var objectType = typeof(Object);
+            var commandType = typeof(Command);
+            return _commands.Where(x => {
+                var type = x.GetType();
+                return type.BaseType == objectType || type.BaseType == commandType;
+            });
         }
 
         private IEnumerable<ICommand> GetChildCommands(ICommand command) {
-            var parentType = command.GetType();
-            return _commands.Where(x => x is Command cmd && cmd.DeclareParent() == parentType);
+            var commandType = typeof(Command<>).MakeGenericType(command.GetType());
+            return _commands.Where(x => x.GetType().IsSubclassOf(commandType));
         }
     }
 }

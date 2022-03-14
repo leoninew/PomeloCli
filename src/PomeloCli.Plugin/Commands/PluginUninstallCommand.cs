@@ -7,8 +7,8 @@ using PomeloCli.Commands;
 using PomeloCli.Plugin.Native;
 
 namespace PomeloCli.Plugin.Commands {
-    [Command("uninstall", Parent = typeof(PluginCommand))]
-    class PluginUninstallCommand : Command {
+    [Command("uninstall")]
+    class PluginUninstallCommand : Command<PluginCommand> {
         private readonly IPluginProvider _pluginProvider;
 
         public PluginUninstallCommand(IPluginProvider pluginProvider) {

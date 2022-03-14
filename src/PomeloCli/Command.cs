@@ -86,11 +86,6 @@ namespace PomeloCli {
             return new CommandDeclaration(attr.Name, attr.Description);
         }
 
-        public virtual Type DeclareParent() {
-            var attr = GetType().GetCustomAttribute<CommandAttribute>();
-            return attr?.Parent;
-        }
-
         protected virtual IEnumerable<CommandArgument> DeclareArguments() {
             var type = GetType();
             var attrs = type.GetCustomAttributes<CommandArgumentAttribute>(false);

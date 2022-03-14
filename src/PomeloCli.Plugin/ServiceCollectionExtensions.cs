@@ -33,7 +33,7 @@ namespace PomeloCli.Plugin {
             var pluginOptions = scope.ServiceProvider.GetRequiredService<IOptions<PluginOptions>>();
 
 
-            if (pluginOptions.Value.Disable) {
+            if (pluginOptions.Value.Disable || Boolean.TrueString.Equals(configuration["NO_PLUGIN"], StringComparison.OrdinalIgnoreCase)) {
                 logger.LogDebug("plugin loading skipped");
             }
             else {
