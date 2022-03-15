@@ -45,15 +45,20 @@ namespace PomeloCli {
         private IEnumerable<ICommand> GetRootCommands() {
             var objectType = typeof(Object);
             var commandType = typeof(Command);
+            var asyncCommandType = typeof(AsyncCommand);
             return _commands.Where(x => {
-                var type = x.GetType();
-                return type.BaseType == objectType || type.BaseType == commandType;
+                var currentCommandType = x.GetType();
+                return currentCommandType.BaseType == objectType || currentCommandType.BaseType == commandType || currentCommandType.BaseType == asyncCommandType;
             });
         }
 
         private IEnumerable<ICommand> GetChildCommands(ICommand command) {
             var commandType = typeof(Command<>).MakeGenericType(command.GetType());
-            return _commands.Where(x => x.GetType().IsSubclassOf(commandType));
+            var asyncCommandType = typeof(AsyncCommand<>).MakeGenericType(command.GetType());
+            return _commands.Where(x => {
+                var currentCommandType = x.GetType();
+                return currentCommandType.IsSubclassOf(commandType) || currentCommandType.IsSubclassOf(asyncCommandType);
+            });
         }
     }
 }

@@ -6,13 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-		<!-- <PackageReference Include="PomeloCli" Version="1.1.0" /> -->
+		<PackageReference Include="PomeloCli" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <ProjectReference Include="..\PomeloCli\PomeloCli.csproj" />
-  </ItemGroup>
+  </ItemGroup> -->
 </Project>
