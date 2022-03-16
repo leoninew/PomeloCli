@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.CommandLineUtils;
+using PomeloCli.Commands;
 
 namespace PomeloCli {
     public class CommandService : ICommandService {
@@ -34,30 +35,29 @@ namespace PomeloCli {
                 cmdApp.Command(commandName, childCmdApp => ConfigureCommand(childCommand, childCmdApp));
             }
 
-            if (command is AsyncCommand asyncCommand) {
-                cmdApp.OnExecute(asyncCommand.ExecuteAsync);
+            var commandFacade = new CommandFacade(command);
+            if (command is IAsyncCommand asyncCommand) {
+                cmdApp.OnExecute(commandFacade.ExecuteAsync);
             }
             else {
-                cmdApp.OnExecute(command.Execute);
+                cmdApp.OnExecute(commandFacade.Execute);
             }
         }
 
         private IEnumerable<ICommand> GetRootCommands() {
             var objectType = typeof(Object);
             var commandType = typeof(Command);
-            var asyncCommandType = typeof(AsyncCommand);
             return _commands.Where(x => {
                 var currentCommandType = x.GetType();
-                return currentCommandType.BaseType == objectType || currentCommandType.BaseType == commandType || currentCommandType.BaseType == asyncCommandType;
+                return currentCommandType.BaseType == objectType || currentCommandType.BaseType == commandType;
             });
         }
 
         private IEnumerable<ICommand> GetChildCommands(ICommand command) {
             var commandType = typeof(Command<>).MakeGenericType(command.GetType());
-            var asyncCommandType = typeof(AsyncCommand<>).MakeGenericType(command.GetType());
             return _commands.Where(x => {
                 var currentCommandType = x.GetType();
-                return currentCommandType.IsSubclassOf(commandType) || currentCommandType.IsSubclassOf(asyncCommandType);
+                return currentCommandType.IsSubclassOf(commandType);
             });
         }
     }
