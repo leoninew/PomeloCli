@@ -12,7 +12,7 @@ namespace PomeloCli.Tests.Commands {
         [CommandOption("-n|--newline", CommandOptionType.NoValue, Description = "do not output the trailing newline")]
         public Boolean Newline { get; set; }
 
-        protected override int OnExecute() {
+        public override int Execute() {
             if (Newline) {
                 Console.Write(Input);
             }

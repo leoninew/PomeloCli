@@ -18,7 +18,7 @@ namespace PomeloCli.Plugin.Commands {
             Description = "The NuGet package source to use during the restore.")]
         public String Source { get; set; }
 
-        protected override Int32 OnExecute() {
+        public override Int32 Execute() {
             var pluginCsproj = _pluginProvider.GetPluginCsproj(false);
             if (File.Exists(pluginCsproj) == false) {
                 return 0;

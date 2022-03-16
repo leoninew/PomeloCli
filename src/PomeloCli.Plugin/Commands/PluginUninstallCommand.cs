@@ -20,7 +20,7 @@ namespace PomeloCli.Plugin.Commands {
             Description = "The package reference to remove.")]
         public String Name { get; set; }
 
-        protected override Int32 OnExecute() {
+        public override Int32 Execute() {
             var pluginCsproj = _pluginProvider.GetPluginCsproj(false);
             if (File.Exists(pluginCsproj) == false) {
                 return 0;

@@ -57,9 +57,9 @@ namespace PomeloCli.DemoApp {
         }
 
         private void ConfigureGlobalOptions(CommandLineApplication commandApp) {
-            commandApp.Option("--no-upgrade", "disable upgrade check, equals to env PC_NO_UPGRADE=true",
-                CommandOptionType.NoValue);
             commandApp.Option("--no-diagnosis", "disable diagnosis report, equals to env PC_NO_DIAGNOSIS=true",
+                CommandOptionType.NoValue);
+            commandApp.Option("--no-upgrade", "disable upgrade check, equals to env PC_NO_UPGRADE=true",
                 CommandOptionType.NoValue);
             commandApp.Option("--no-plugin", "disable plugin loading, equals to env PC_NO_PLUGIN=true",
                 CommandOptionType.NoValue);

@@ -12,9 +12,10 @@ namespace PomeloCli.DemoPlugin.Commands {
         [CommandOption("-a|--all", CommandOptionType.NoValue,
             Description = "Show all containers (default shows just running)")]
         public Boolean All { get; set; }
-        
-        protected override Int32 OnExecute() {
-            return base.OnExecute();
+
+        public override int Execute() {
+            Console.WriteLine("docker ps");
+            return 0;
         }
     }
     
@@ -23,9 +24,10 @@ namespace PomeloCli.DemoPlugin.Commands {
         [CommandOption("-f|--filter", CommandOptionType.SingleValue,
             Description = "Filter output based on conditions provided")]
         public String Filter { get; set; }
-        
-        protected override Int32 OnExecute() {
-            return base.OnExecute();
+
+        public override int Execute() {
+            Console.WriteLine("docker images");
+            return 0;
         }
     }
     
@@ -33,9 +35,10 @@ namespace PomeloCli.DemoPlugin.Commands {
     class DockerLogsCommand: Command<DockerCommand> {
         [CommandArgument("container", false)]
         public String Container { get; set; }
-        
-        protected override Int32 OnExecute() {
-            return base.OnExecute();
+
+        public override int Execute() {
+            Console.WriteLine("docker logs");
+            return 0;
         }
     }
 }

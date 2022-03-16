@@ -33,7 +33,7 @@ namespace PomeloCli.Plugin.Commands {
         [CommandOption("-a|--assembly", CommandOptionType.SingleValue)]
         public String Assembly { get; set; }
 
-        protected override Int32 OnExecute() {
+        public override Int32 Execute() {
             var args = new List<String>();
             args.Add("add");
             args.Add("package");

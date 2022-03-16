@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ x$1 == x'build' ]]; then
+if [[ x$1 == x'clear' ]]; then
+    dotnet nuget locals http-cache --clear
+
+elif [[ x$1 == x'build' ]]; then
     echo ================build=========================
     dotnet clean PomeloCli.sln -v m
     if [[ x$2 == x'' ]]; then
