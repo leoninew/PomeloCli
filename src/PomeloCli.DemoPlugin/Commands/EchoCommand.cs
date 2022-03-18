@@ -22,7 +22,7 @@ namespace PomeloCli.DemoPlugin.Commands {
             };
         }
 
-        protected override Int32 OnExecute() {
+        public override Int32 Execute() {
             var inputArg = CommandContainer.GetArgument("input");
             var newlineOption = CommandContainer.GetOption("-n|--newline");
 

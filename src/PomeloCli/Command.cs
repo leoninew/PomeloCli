@@ -9,36 +9,27 @@ using PomeloCli.Commands;
 namespace PomeloCli {
     public abstract class Command : ICommand {
         private const String DefaultHelpOption = "-?|-h|--help";
+        private readonly ICommandContainer _commandContainer;
 
         protected Command() {
-            CommandContainer = new CommandContainer();
+            _commandContainer = new CommandContainer();
         }
 
-        protected ICommandContainer CommandContainer { get; }
+        public ICommandContainer CommandContainer {
+            get { return _commandContainer; }
+        }
 
         public void Configure(CommandLineApplication cmdApp) {
-            CommandContainer.SetApplication(cmdApp);
+            _commandContainer.SetApplication(cmdApp);
             ConfigureHelp(cmdApp);
             ConfigureCommand(cmdApp);
             ConfigureArguments(cmdApp);
             ConfigureOptions(cmdApp);
         }
 
-        public Int32 Execute() {
-            BindingParameters();
-            return OnExecute();
-        }
-
-        protected void BindingParameters() {
-            BindingArguments();
-            BindingOptions();
-            try {
-                Validator.ValidateObject(this, new ValidationContext(this), true);
-            }
-            catch (ValidationException ex) {
-                throw new ArgumentException($"command '{GetType().FullName}' validate failed", ex);
-            }
-        }
+        public virtual Int32 Execute() {
+            return 0;
+        }        
 
         private void ConfigureHelp(CommandLineApplication cmdApp) {
             cmdApp.HelpOption(DeclareHelp() ?? DefaultHelpOption);
@@ -84,11 +75,6 @@ namespace PomeloCli {
 
             Validator.ValidateObject(attr, new ValidationContext(attr), true);
             return new CommandDeclaration(attr.Name, attr.Description);
-        }
-
-        public virtual Type DeclareParent() {
-            var attr = GetType().GetCustomAttribute<CommandAttribute>();
-            return attr?.Parent;
         }
 
         protected virtual IEnumerable<CommandArgument> DeclareArguments() {
@@ -160,64 +146,6 @@ namespace PomeloCli {
                     && prop.PropertyType != typeof(List<String>)) {
                     throw new InvalidProgramException("property type must be string[] or List<string>");
                 }
-            }
-        }
-
-        protected virtual Int32 OnExecute() {
-            return 0;
-        }
-
-        private void BindingArguments() {
-            var type = GetType();
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in props) {
-                if (prop.CanWrite == false) {
-                    continue;
-                }
-
-                var attr = prop.GetCustomAttribute<CommandArgumentAttribute>();
-                if (attr == null) {
-                    continue;
-                }
-
-                var argument = CommandContainer.GetArgument(attr.Name);
-                if (argument == null) {
-                    continue;
-                }
-
-                Object value = argument.MultipleValues switch {
-                    false => argument.Value,
-                    _ => argument.Values
-                };
-                prop.SetValue(this, value);
-            }
-        }
-
-        private void BindingOptions() {
-            var type = GetType();
-            var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var prop in props) {
-                if (prop.CanWrite == false) {
-                    continue;
-                }
-
-                var attr = prop.GetCustomAttribute<CommandOptionAttribute>();
-                if (attr == null) {
-                    continue;
-                }
-
-                var option = CommandContainer.GetOption(attr.Template);
-                if (option == null) {
-                    continue;
-                }
-
-                Object value = option.OptionType switch {
-                    CommandOptionType.NoValue => option.HasValue(),
-                    CommandOptionType.SingleValue => option.Value(),
-                    _ => option.Values
-                };
-
-                prop.SetValue(this, value);
             }
         }
     }

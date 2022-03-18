@@ -4,12 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Options;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 using PomeloCli.Plugin.Native;
 
 namespace PomeloCli.Plugin.Commands {
-    [Command("install", Parent = typeof(PluginCommand))]
-    class PluginInstallCommand : Command {
+    [Command("install")]
+    class PluginInstallCommand : Command<PluginCommand> {
         private readonly IOptions<PluginOptions> _pluginOptions;
         private readonly IPluginProvider _pluginProvider;
 
@@ -34,7 +33,7 @@ namespace PomeloCli.Plugin.Commands {
         [CommandOption("-a|--assembly", CommandOptionType.SingleValue)]
         public String Assembly { get; set; }
 
-        protected override Int32 OnExecute() {
+        public override Int32 Execute() {
             var args = new List<String>();
             args.Add("add");
             args.Add("package");
