@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -41,7 +41,7 @@ namespace PomeloCli.Commands {
                 return;
             }
 
-            var type = _command.GetType();
+            var type = command.GetType();
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in props) {
                 if (prop.CanWrite == false) {
@@ -62,7 +62,7 @@ namespace PomeloCli.Commands {
                     false => argument.Value,
                     _ => argument.Values
                 };
-                prop.SetValue(this, value);
+                prop.SetValue(_command, value);
             }
         }
 
@@ -72,7 +72,7 @@ namespace PomeloCli.Commands {
                 return;
             }
 
-            var type = GetType();
+            var type = command.GetType();
             var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var prop in props) {
                 if (prop.CanWrite == false) {
@@ -95,13 +95,13 @@ namespace PomeloCli.Commands {
                     _ => option.Values
                 };
 
-                prop.SetValue(this, value);
+                prop.SetValue(_command, value);
             }
         }
 
         private void ValidateCommand() {
             try {
-                Validator.ValidateObject(this, new ValidationContext(this), true);
+                Validator.ValidateObject(_command, new ValidationContext(_command), true);
             }
             catch (ValidationException ex) {
                 throw new ArgumentException($"command '{GetType().FullName}' validate failed", ex);
