@@ -21,6 +21,7 @@ namespace PomeloCli.Plugin {
             services.AddTransient<ICommand, PluginInstallCommand>();
             services.AddTransient<ICommand, PluginUninstallCommand>();
             services.AddTransient<ICommand, PluginListCommand>();
+            services.AddTransient<ICommand, PluginMigrateCommand>();
 
             return services;
         }
@@ -31,7 +32,6 @@ namespace PomeloCli.Plugin {
             var pluginProvider = scope.ServiceProvider.GetRequiredService<IPluginProvider>();
             var pluginResolver = scope.ServiceProvider.GetRequiredService<IPluginResolver>();
             var pluginOptions = scope.ServiceProvider.GetRequiredService<IOptions<PluginOptions>>();
-
 
             if (pluginOptions.Value.Disable || Boolean.TrueString.Equals(configuration["NO_PLUGIN"], StringComparison.OrdinalIgnoreCase)) {
                 logger.LogDebug("plugin loading skipped");
