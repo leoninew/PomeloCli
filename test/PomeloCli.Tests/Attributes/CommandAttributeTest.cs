@@ -2,20 +2,10 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 using Xunit;
 
 namespace PomeloCli.Tests.Attributes {
     public class CommandAttributeTest {
-        [Fact]
-        public void Validate_ShouldFail_ApplyInvalidParent() {
-            var commandAttr = typeof(InvalidCommand1).GetCustomAttribute<CommandAttribute>();
-
-            Assert.NotNull(commandAttr);
-            var exception = Assert.Throws<ValidationException>(() =>
-                Validator.ValidateObject(commandAttr, new ValidationContext(commandAttr), false));
-            Assert.Equal(exception.ValidationResult.MemberNames, new[] { "Parent" });
-        }
         
         [Fact]
         public void Validate_ShouldFail_ApplyInvalidName() {
@@ -44,16 +34,13 @@ namespace PomeloCli.Tests.Attributes {
         }
     }
 
-    [Command("test", Parent = typeof(Object))]
-    class InvalidCommand1 {
-    }
 
     [Command("test")]
     class ParentCommand : Command {
     }
 
-    [Command("test", Parent = typeof(ParentCommand))]
-    class ChildCommand : Command {
+    [Command("test")]
+    class ChildCommand : Command<ParentCommand> {
     }
     
     [Command("123")]

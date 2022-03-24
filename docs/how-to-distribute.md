@@ -91,18 +91,12 @@ dotnet tool update PomeloCli.DemoApp -g --add-source http://localhost:5555/v3/in
 dotnet tool uninstall PomeloCli.DemoApp -g
 ```
 
-由于命名变更，如果安装了 0.9.4.x 之前的版本，需要使用以下命令卸载
-
-```bash
-dotnet tool uninstall mysoft.PomeloCli -g
-```
-
 ### 使用 nuget 源安装或更新插件
 
 安装或更新均使用 `pomelo-cli plugin install` 命令，目前插件只支持 nuget 源
 
 ```bash
-pomelo-cli plugin install PomeloCli.DemoPlugin -s http://localhost:5555/v3/index.json --version $VERSION
+pomelo-cli --no-plugin plugin install PomeloCli.DemoPlugin -s http://localhost:5555/v3/index.json --version $VERSION
 ```
 
 ### 卸载插件

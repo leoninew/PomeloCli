@@ -5,7 +5,7 @@
     <OutputType>Exe</OutputType>
     <PackAsTool>true</PackAsTool>
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <!-- <Version>0.0.1</Version> -->
+     <Version>1.2.5</Version> 
     <TargetName>PomeloCli.DemoApp</TargetName>
     <IsPackable>true</IsPackable>
     <PackageId>PomeloCli.DemoApp</PackageId>
@@ -14,12 +14,12 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <DefineConstants>NET5_0</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <DefineConstants>NETCOREAPP3_1</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="PomeloCli" Version="1.0.3" /> -->
+    <PackageReference Include="PomeloCli" Version="1.2.3" />
     <PackageReference Include="System.Text.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
@@ -27,12 +27,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="5.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-  </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\PomeloCli\PomeloCli.csproj" />
+		<!-- <ProjectReference Include="..\PomeloCli\PomeloCli.csproj" />  -->
     <ProjectReference Include="..\PomeloCli.Plugin\PomeloCli.Plugin.csproj" />
   </ItemGroup>
 

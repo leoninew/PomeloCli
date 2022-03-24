@@ -5,9 +5,10 @@
       "commandLineArgs": "-h",
       "dotnetRunMessages": "true",
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "debug",
+        "PC_Logging__LogLevel__Default": "Debug",
         "PC_NO_UPGRADE": "true",
-        "PC_NO_DIAGNOSIS": "true"
+        "PC_NO_DIAGNOSIS": "true",
+        "PC_NO_PLUGIN": "true"
       }
     }
   }

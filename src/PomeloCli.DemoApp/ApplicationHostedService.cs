@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using PomeloCli.DemoApp.Diagnosis;
@@ -40,25 +41,24 @@ namespace PomeloCli.DemoApp {
             ConfigureGlobalOptions(commandApp);
             await CheckUpgradeSafelyAsync();
 
-            var exception = default(Exception);
             try {
                 commandApp.Execute(_configurationSource.Args.ToArray());
             }
             catch (Exception ex) {
-                _logger.LogError(ex, "command execute failed");
-                exception = ex;
+                _logger.LogError("command execute failed, args: {Args}", JsonSerializer.Serialize(_configurationSource.Args));
+                await DiagnosisReportSafelyAsync(ex);
+                throw;
             }
 
-            await DiagnosisReportSafelyAsync(exception);
-            if(exception != null) {
-                throw exception;
-            }
+            await DiagnosisReportSafelyAsync();
         }
 
         private void ConfigureGlobalOptions(CommandLineApplication commandApp) {
             commandApp.Option("--no-upgrade", "disable upgrade check, equals to env PC_NO_UPGRADE=true",
                 CommandOptionType.NoValue);
             commandApp.Option("--no-diagnosis", "disable diagnosis report, equals to env PC_NO_DIAGNOSIS=true",
+                CommandOptionType.NoValue);
+            commandApp.Option("--no-plugin", "disable plugin loading, equals to env PC_NO_PLUGIN=true",
                 CommandOptionType.NoValue);
         }
 
@@ -93,7 +93,7 @@ namespace PomeloCli.DemoApp {
             }
         }
 
-        private async Task DiagnosisReportSafelyAsync(Exception exception) {
+        private async Task DiagnosisReportSafelyAsync(Exception exception = null) {
             var args = _configurationSource.Args.ToArray();
             // if declared in args or env value, skip diagnosis report
             var skipDiagnosisReport = args.Contains("--no-diagnosis", StringComparer.OrdinalIgnoreCase)

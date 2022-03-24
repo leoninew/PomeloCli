@@ -1,15 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Options;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
-using PomeloCli.Plugin.Native;
+using PomeloCli.Plugin.Runtime;
 
 namespace PomeloCli.Plugin.Commands {
-    [Command("install", Parent = typeof(PluginCommand))]
-    class PluginInstallCommand : Command {
+    [Command("install")]
+    class PluginInstallCommand : Command<PluginCommand> {
         private readonly IOptions<PluginOptions> _pluginOptions;
         private readonly IPluginProvider _pluginProvider;
 
@@ -34,42 +32,21 @@ namespace PomeloCli.Plugin.Commands {
         [CommandOption("-a|--assembly", CommandOptionType.SingleValue)]
         public String Assembly { get; set; }
 
-        protected override Int32 OnExecute() {
-            var args = new List<String>();
-            args.Add("add");
-            args.Add("package");
-            args.Add(Name);
-
-            if (Version != null) {
-                args.Add("-v");
-                args.Add(Version);
-            }
-
-            if (Source != null) {
-                args.Add("-s");
-                args.Add(Source);
-            }
-
-            args.Add("--package-directory");
-            args.Add(_pluginOptions.Value.GetPackageDir());
-
+        public override Int32 Execute() {
+            var dotnetPackage = new DotnetPackage(Name, Version, Source);
             _pluginProvider.GetPluginCsproj(true); // ensure initialized
             var pluginDir = _pluginProvider.GetPluginDir(false);
+            var packageDir = _pluginOptions.Value.GetPackageDir();
+            DotnetPackageManager.AddPackage(dotnetPackage, pluginDir, packageDir);
 
-            var dotnet = DotnetHelper.DetectExecutable();
-            var result = CommandRunner.Run(dotnet, args, true, pluginDir);
-            Console.WriteLine(result.AllOutput);
+            _pluginProvider.Save(new Plugin {
+                Name = Name,
+                Version = Version,
+                Source = Source,
+                Assembly = Assembly
+            });
 
-            if (result.ExitCode == 0) {
-                _pluginProvider.Save(new Plugin {
-                    Name = Name,
-                    Version = Version,
-                    Source = Source,
-                    Assembly = Assembly
-                });
-            }
-
-            return result.ExitCode;
+            return 0;
         }
     }
 }
