@@ -1,17 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.Options;
 using PomeloCli.Attributes;
-using PomeloCli.Plugin.Native;
+using PomeloCli.Plugin.Runtime;
 
 namespace PomeloCli.Plugin.Commands {
     [Command("list")]
     class PluginListCommand : Command<PluginCommand> {
+        private readonly IOptions<PluginOptions> _pluginOptions;
         private readonly IPluginProvider _pluginProvider;
 
-        public PluginListCommand(IPluginProvider pluginProvider) {
+        public PluginListCommand(IOptions<PluginOptions> pluginOptions, IPluginProvider pluginProvider) {
             _pluginProvider = pluginProvider;
+            _pluginOptions = pluginOptions;
         }
 
         [CommandOption("-s|--source", CommandOptionType.SingleValue,
@@ -24,17 +26,9 @@ namespace PomeloCli.Plugin.Commands {
                 return 0;
             }
 
-            var args = new List<String> {"list", "package"};
-            if (Source != null) {
-                args.Add("-s");
-                args.Add(Source);
-            }
-
-            var dotnet = DotnetHelper.DetectExecutable();
             var pluginDir = _pluginProvider.GetPluginDir(false);
-            var result = CommandRunner.Run(dotnet, args, true, pluginDir);
-            Console.WriteLine(result.AllOutput);
-            return result.ExitCode;
+            DotnetPackageManager.ListPackage(Source, pluginDir);
+            return 0;
         }
     }
 }
