@@ -62,6 +62,8 @@ namespace test
 - 属性 `Input` 及相应特性 `[CommandArgument("input", false)]` 表示可以接受参数
 - 方法 `public override int Execute()` 展示了命令的内部逻辑，它会原样打印输入的字符串
 
+> 完整的项目可以参考 [docs/1-get-start](docs/1-get-start)
+
 3. 运行项目，查看使用帮助
 
 ```bash
@@ -158,6 +160,8 @@ namespace test
 - 命令特性 `[Command]` 及参数特性 `[CommandOption]` 都有可选的属性 `Description` 以描述用法
 - 父命令一般是空命令
 
+> 完整的项目可以参考 [docs/1-get-start](docs/2-dependency-inject)
+
 6. 运行项目，查看命令 `docker ps` 的使用帮助
 
 ```bash
@@ -174,7 +178,7 @@ Options:
 运行命令 `docker ps -a`
 
 ```bash
-$ dotnet run -- docker ps -a
+$ dotnet run --no-build -- docker ps -a
 This is docker list command
 ```
 
@@ -193,6 +197,8 @@ This is docker list command
 - 如何编写基本的控制台程序管理自己的命令
 - 如何查看命令的使用帮助
 - 如何使用依赖注入管理自己的命令
+
+有了以上能力，我们可以借助 *dotnet tool* 的能力将自己的应用打包成 cli 应用，而如何插件化以应对业务命令增长的需求，将在后面进一步介绍。
 
 ## 参考
 
