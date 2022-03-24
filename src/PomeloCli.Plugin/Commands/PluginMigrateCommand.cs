@@ -1,11 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using PomeloCli.Attributes;
-using PomeloCli.Plugin.Native;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Options;
+using PomeloCli.Plugin.Runtime;
 
 namespace PomeloCli.Plugin.Commands {
     [Command("migrate")]
@@ -27,42 +26,24 @@ namespace PomeloCli.Plugin.Commands {
             if (File.Exists(pluginCsproj) == false) {
                 return 0;
             }
-
+            
+            _pluginProvider.GetPluginCsproj(true); // ensure initialized
+            var pluginDir = _pluginProvider.GetPluginDir(false);
+            var packageDir = _pluginOptions.Value.GetPackageDir();
+            
             var plugins = _pluginProvider.FindAll().ToArray();
-            var dotnet = DotnetHelper.DetectExecutable();
             foreach (var plugin in plugins) {
+                var dotnetPackage = new DotnetPackage(plugin.Name, Version, plugin.Source);
+                DotnetPackageManager.AddPackage(dotnetPackage, pluginDir, packageDir);
                 
-                var args = new List<String>();
-                args.Add("add");
-                args.Add("package");
-                args.Add(plugin.Name);
-
-                if (Version != null) {
-                    args.Add("-v");
-                    args.Add(Version);
-                }
-
-                if (plugin.Source != null) {
-                    args.Add("-s");
-                    args.Add(plugin.Source);
-                }
-
-                args.Add("--package-directory");
-                args.Add(_pluginOptions.Value.GetPackageDir());
-
-                var pluginDir = _pluginProvider.GetPluginDir(false);
-                var result = CommandRunner.Run(dotnet, args, true, pluginDir);
-                Console.WriteLine(result.AllOutput);
-                
-                if (result.ExitCode == 0) {
-                    _pluginProvider.Save(new Plugin {
-                        Name = plugin.Name,
-                        Version = Version,
-                        Source = plugin.Source,
-                        Assembly = plugin.Assembly
-                    });
-                }
+                _pluginProvider.Save(new Plugin {
+                    Name = plugin.Name,
+                    Version = Version,
+                    Source = plugin.Source,
+                    Assembly = plugin.Assembly
+                });
             }
+
             return 0;
         }
     }
