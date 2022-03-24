@@ -144,7 +144,7 @@ namespace test
 
         public override int Execute()
         {
-            // Util.Cmd("docker", "ps"); //can execute under LINQPad
+		    // Util.Cmd("docker", All ? "ps -a" : "ps"); //can execute under LINQPad
             Console.WriteLine("This is docker list command");
             return 0;
         }
@@ -178,7 +178,9 @@ $ dotnet run -- docker ps -a
 This is docker list command
 ```
 
-如果在 LINQPad 下使用，可以将 `Console.WriteLine()` 语句替换为 `Util.Cmd("docker", "ps")` 以检查效果。
+如果在 LINQPad 下使用，可以将 `Console.WriteLine()` 语句替换为调用 `Util.Cmd()` 以查看效果。
+
+![image-20220324154446718](docs/README.assets/image-20220324154446718.png)
 
 ### 小结
 
