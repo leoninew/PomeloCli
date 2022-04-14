@@ -66,7 +66,7 @@ namespace test
 - 属性 `Input` 及相应特性 `[CommandArgument("input", false)]` 表示可以接受参数
 - 方法 `public override int Execute()` 展示了命令的内部逻辑，它会原样打印输入的字符串
 
-完整示例可以参考 [docs/1-get-start](docs/1-get-start)
+完整示例可以参考 [samples/1-get-start](samples/1-get-start)
 
 ### 3. 首次运行项目
 
@@ -170,7 +170,7 @@ namespace test
 - 命令特性 `[Command]` 及参数特性 `[CommandOption]` 都有可选的属性 `Description` 以描述用法
 - 父命令一般是空命令
 
-完整示例可以参考 [docs/1-get-start](docs/2-dependency-inject)
+完整示例可以参考 [samples/1-get-start](samples/2-dependency-inject)
 
 ### 6. 重新运行项目
 
@@ -234,7 +234,7 @@ You can invoke the tool using the following command: mycli
 Tool 'mycli' (version '1.0.0') was successfully installed.
 ```
 
-> 文件 [docs/3-pack-as-tool/disable_nuget.config](docs/3-pack-as-tool/disable_nuget.config) 的作用是避免包标识冲突，可以阅读 [How to fix NU1212 for dotnet tool install](https://stackoverflow.com/questions/52527004/how-to-fix-nu1212-for-dotnet-tool-install) 以获取进一步的信息。
+> 文件 [samples/3-pack-as-tool/disable_nuget.config](samples/3-pack-as-tool/disable_nuget.config) 的作用是避免包标识冲突，可以阅读 [How to fix NU1212 for dotnet tool install](https://stackoverflow.com/questions/52527004/how-to-fix-nu1212-for-dotnet-tool-install) 以获取进一步的信息。
 
 最后就可以使用命令 `mycli` 作为我们的 cli 工具入口了
 
@@ -243,7 +243,7 @@ $ mycli docker ps -a
 This is docker list command
 ```
 
-完整示例可以参考 [docs/3-pack-as-tool](docs/3-pack-as-tool)
+完整示例可以参考 [samples/3-pack-as-tool](samples/3-pack-as-tool)
 
 ### 8. 小结
 
@@ -261,6 +261,103 @@ This is docker list command
 
 有了以上能力，我们可以借助 *dotnet tool* 的能力将自己的应用打包成 cli 应用，而如何插件化以应对业务命令增长的需求，将在后面进一步介绍。
 
+## 进阶话题
+
+命令行并不是新鲜话题，但是长久以来缺乏标准。在跨平台开发及云原生推广的背景下，*inux 下诸多工具的使用方式提供了有效参考，像 docker、kubectl 甚至 dotnet 的 CLI 工具使用都有以下形式：
+
+```bash
+[command] [options] [arguments]
+[command] [options] [sub-command] [sub-command-options] [sub-command-arguments]
+```
+
+它们引入了以下概念：
+
+- command：命令
+- options：选项
+- arguments: 参数
+
+`sub-command` 是子命令，其结构与首行相同，仍然由选项(Options) 和参数(Arguments) 组成。
+
+> 注意：子命令可以继续包含下级命令。
+
+### 命令(Command)
+
+命令(command) 是工具调用入口，复杂工具像 kubectl 等可能会包含若干层层子命令，下文将描述。
+
+### 参数(Arguments)
+
+参数(arguments)用来表示被操作的对象，它可能是单个也可以是多个，取决于具体实现
+
+- 以 shell 解压缩命令 `unzip something.zip -d somewhere` 示例，`something.zip` 表示解压的文件，是单个参数
+- 以 shell 删除命令 `rm 1.log 2.log` 示例，`1.log 2.log` 表示要删除的文件名，是多个参数
+
+### 选项(Options)
+
+选项(Options) 用来对命令(Command) 进行补充，它常常有简写和全名模式，像 `dotnet -h ` 与 `dotnet --help` 是等效的，都会打印帮助信息。
+
+#### 无值
+
+- 以 shell 删除命令 `rm -rf src/` 示例，`-r, -R, --recursive` 是递归选项，`-f, --force` 是强制删除选项，无须补充参数值，该命令表示强制递归删除目录。
+
+#### 单值
+
+- 以 shell 解压缩命令 `unzip something.zip -d somewhere` 示例，`-d somewhere` 表示将压缩文件解压到 *somewhere* 目录
+- 以 shell 的文件读取命令 `head somefile -n 1` 示例，`-n 1` 表示读取一行，`--number 1` 效果相同
+
+#### 多值
+
+- 以容器部署命令 `docker-compose up -f docker-compose.yml -f docker-compose.override.yml` 示例，该命令包含了两个 yaml 文件，它们会被合并读取。
+
+### 关于子命令
+
+当工具包含的功能非常多的时候，将部分命令拆分出来以子命令提供更加友好，避免了各种选项和参数的组合使用带来的使用困惑和记忆负担。截取 kubectl 的部分使用说明如下
+
+```bash
+$ kubectl -h
+kubectl controls the Kubernetes cluster manager.
+
+ Find more information at: https://kubernetes.io/docs/reference/kubectl/overview/
+
+Basic Commands (Beginner):
+  create        Create a resource from a file or from stdin
+  expose        Take a replication controller, service, deployment or pod and expose it as a new Kubernetes service
+  run           Run a particular image on the cluster
+  set           Set specific features on objects
+
+Basic Commands (Intermediate):
+  explain       Get documentation for a resource
+  get           Display one or many resources
+  edit          Edit a resource on the server
+  delete        Delete resources by file names, stdin, resources and names, or by resources and label selector
+
+Deploy Commands:
+  rollout       Manage the rollout of a resource
+  scale         Set a new size for a deployment, replica set, or replication controller
+  autoscale     Auto-scale a deployment, replica set, stateful set, or replication controller
+
+Cluster Management Commands:
+  certificate   Modify certificate resources.
+  cluster-info  Display cluster information
+  top           Display resource (CPU/memory) usage
+  cordon        Mark node as unschedulable
+  uncordon      Mark node as schedulable
+  drain         Drain node in preparation for maintenance
+  taint         Update the taints on one or more nodes
+  
+...
+```
+
+可以看到 k8s 的命令很多，但根据业务拆分的很细，方便了运维人员记忆，降低了使用成本。
+
+### 命令行类库参考
+
+实际使用中，由于各种原因并非所有工具都根据以上标准进行实现，像常见的查找命令 `find` 就很复杂，能够支持各种条件组合。个人觉得以上标准通俗易于理解和实现，且能够满足日常使用，据此本项目借助 Microsoft.Extensions.CommandLineUtils 提供了对以上标准的支持。
+
+其他语言像 python 和 java 都有自己的解决方案，列举如下请自行参数。
+
+- [argparse — Parser for command-line options, arguments and sub-commands](https://docs.python.org/3/library/argparse.html)
+- [picocli - a mighty tiny command line interface](https://picocli.info/)
+
 ## 高级话题[TODO]
 
 ### 命令插件化
@@ -268,6 +365,10 @@ This is docker list command
 ### 更新检查
 
 ### 使用情况上报
+
+## 路线图
+
+### 自助打包
 
 ## 参考文档
 
