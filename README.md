@@ -66,7 +66,7 @@ namespace test
 - 属性 `Input` 及相应特性 `[CommandArgument("input", false)]` 表示可以接受参数
 - 方法 `public override int Execute()` 展示了命令的内部逻辑，它会原样打印输入的字符串
 
-完整示例可以参考 [docs/1-get-start](docs/1-get-start)
+完整示例可以参考 [samples/1-get-start](samples/1-get-start)
 
 ### 3. 首次运行项目
 
@@ -170,7 +170,7 @@ namespace test
 - 命令特性 `[Command]` 及参数特性 `[CommandOption]` 都有可选的属性 `Description` 以描述用法
 - 父命令一般是空命令
 
-完整示例可以参考 [docs/1-get-start](docs/2-dependency-inject)
+完整示例可以参考 [samples/1-get-start](samples/2-dependency-inject)
 
 ### 6. 重新运行项目
 
@@ -234,7 +234,7 @@ You can invoke the tool using the following command: mycli
 Tool 'mycli' (version '1.0.0') was successfully installed.
 ```
 
-> 文件 [docs/3-pack-as-tool/disable_nuget.config](docs/3-pack-as-tool/disable_nuget.config) 的作用是避免包标识冲突，可以阅读 [How to fix NU1212 for dotnet tool install](https://stackoverflow.com/questions/52527004/how-to-fix-nu1212-for-dotnet-tool-install) 以获取进一步的信息。
+> 文件 [samples/3-pack-as-tool/disable_nuget.config](samples/3-pack-as-tool/disable_nuget.config) 的作用是避免包标识冲突，可以阅读 [How to fix NU1212 for dotnet tool install](https://stackoverflow.com/questions/52527004/how-to-fix-nu1212-for-dotnet-tool-install) 以获取进一步的信息。
 
 最后就可以使用命令 `mycli` 作为我们的 cli 工具入口了
 
@@ -243,7 +243,7 @@ $ mycli docker ps -a
 This is docker list command
 ```
 
-完整示例可以参考 [docs/3-pack-as-tool](docs/3-pack-as-tool)
+完整示例可以参考 [samples/3-pack-as-tool](samples/3-pack-as-tool)
 
 ### 8. 小结
 
@@ -261,6 +261,13 @@ This is docker list command
 
 有了以上能力，我们可以借助 *dotnet tool* 的能力将自己的应用打包成 cli 应用，而如何插件化以应对业务命令增长的需求，将在后面进一步介绍。
 
+## 进阶话题
+
+### 命令行参考
+
+- [argparse — Parser for command-line options, arguments and sub-commands](https://docs.python.org/3/library/argparse.html)
+- [picocli - a mighty tiny command line interface](https://picocli.info/)
+
 ## 高级话题[TODO]
 
 ### 命令插件化
@@ -268,6 +275,10 @@ This is docker list command
 ### 更新检查
 
 ### 使用情况上报
+
+## 路线图
+
+### 自助打包
 
 ## 参考文档
 
