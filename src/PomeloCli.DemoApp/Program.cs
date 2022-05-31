@@ -55,6 +55,9 @@ namespace PomeloCli.DemoApp {
 
                     // add internal command
                     services.AddTransient<ICommand, VersionCommand>();
+                    services.AddTransient<ICommand, ConfigurationCommand>();
+                    services.AddTransient<ICommand, ConfigurationListCommand>();
+                    services.AddTransient<ICommand, ConfigurationSetCommand>();
                 });
         }
     }

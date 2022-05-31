@@ -2,7 +2,7 @@
   "profiles": {
     "PomeloCli.DemoApp": {
       "commandName": "Project",
-      "commandLineArgs": "-h",
+      "commandLineArgs": "config list -o json",
       "dotnetRunMessages": "true",
       "environmentVariables": {
         "PC_Logging__LogLevel__Default": "Debug",

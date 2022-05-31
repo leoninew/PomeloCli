@@ -36,5 +36,5 @@ elif [[ x$1 == x'push' ]]; then
     fi
 
 else
-    echo 'command not support'    
+    echo command "$1" not support
 fi

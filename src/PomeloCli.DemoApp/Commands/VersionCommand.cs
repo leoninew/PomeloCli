@@ -6,7 +6,7 @@ using PomeloCli.DemoApp.Diagnosis;
 namespace PomeloCli.DemoApp.Commands {
     [Command("version")]
     class VersionCommand : Command {
-        public override int Execute() {
+        public override Int32 Execute() {
             var version = VersionHelper.GetCurrentVersion();
             Console.WriteLine(version);
             return 0;
