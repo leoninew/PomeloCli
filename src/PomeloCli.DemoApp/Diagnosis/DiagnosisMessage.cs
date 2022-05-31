@@ -34,7 +34,7 @@ namespace PomeloCli.DemoApp.Diagnosis {
                 },
                 User = System.Environment.UserName,
                 Version = VersionHelper.GetCurrentVersion(),
-                Directory = System.IO.Directory.GetCurrentDirectory(),
+                Directory = System.IO.Directory.GetCurrentDirectory()
             };
             return info;
         }
@@ -48,7 +48,7 @@ namespace PomeloCli.DemoApp.Diagnosis {
             }
         }
     }
-    
+
     public class DiagnosisEnvironment {
         public String Host { get; set; }
         public String[] Addresses { get; set; }

@@ -1,13 +1,13 @@
 using System;
 using System.Threading.Tasks;
-using PomeloCli.DemoApp.Commands;
-using PomeloCli.DemoApp.Diagnosis;
-using PomeloCli.Plugin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PomeloCli.DemoApp.Commands;
+using PomeloCli.DemoApp.Diagnosis;
+using PomeloCli.Plugin;
 
 namespace PomeloCli.DemoApp {
     public class Program {

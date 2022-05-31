@@ -9,8 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace PomeloCli.Plugin.Runtime {
     class PluginResolver : IPluginResolver {
@@ -42,7 +44,7 @@ namespace PomeloCli.Plugin.Runtime {
                 var method = extension.GetMethod("ConfigureCommands",
                     BindingFlags.Public | BindingFlags.Static);
                 if (method != null) {
-                    method.Invoke(null, new Object[] {services});
+                    method.Invoke(null, new Object[] { services });
                     invoked = true;
                 }
             }
@@ -53,6 +55,23 @@ namespace PomeloCli.Plugin.Runtime {
             }
         }
 
+        public async Task<Version> GetLatestAsync(String name) {
+            var cache = new SourceCacheContext();
+            var repository = Repository.Factory.GetCoreV3(_pluginOptions.Value.PackageSource);
+            var resource = await repository.GetResourceAsync<FindPackageByIdResource>();
+
+            var versions = await resource.GetAllVersionsAsync(
+                name,
+                cache,
+                NullLogger.Instance,
+                CancellationToken.None);
+
+            return versions
+                .Select(x => x.Version)
+                .OrderByDescending(x => x)
+                .FirstOrDefault();
+        }
+
         private String GetPluginEntry(Plugin plugin) {
             var packageDir = _pluginOptions.Value.GetPackageDir();
             if (packageDir == null || Directory.Exists(packageDir) == false) {
@@ -60,7 +79,7 @@ namespace PomeloCli.Plugin.Runtime {
                     plugin.Name, plugin.Version, packageDir);
                 return null;
             }
-            
+
             var libraryDir = Path.Combine(packageDir, plugin.Name.ToLower(), plugin.Version.ToLower());
             if (Directory.Exists(libraryDir) == false) {
                 _logger.LogDebug("package {Name}:{Version} library '{LibraryDir}' not found",
@@ -89,23 +108,6 @@ namespace PomeloCli.Plugin.Runtime {
             _logger.LogDebug("package {Name}:{Version} dll '{AssemblyFile}' not found",
                 plugin.Name, plugin.Version, assemblyFile);
             return null;
-        }
-
-        public async Task<Version> GetLatestAsync(String name) {
-            var cache = new SourceCacheContext();
-            var repository = Repository.Factory.GetCoreV3(_pluginOptions.Value.PackageSource);
-            var resource = await repository.GetResourceAsync<FindPackageByIdResource>();
-
-            var versions = await resource.GetAllVersionsAsync(
-                name,
-                cache,
-                NuGet.Common.NullLogger.Instance,
-                CancellationToken.None);
-
-            return versions
-                .Select(x => x.Version)
-                .OrderByDescending(x => x)
-                .FirstOrDefault();
         }
     }
 }

@@ -8,14 +8,14 @@ using System.Text;
 
 namespace PomeloCli.Plugin.Runtime {
     class CommandExecutor {
-        public static CommandExecuteResult Start(string commandText, string args,
-            Encoding encoding = null, bool quiet = false, String workingDir = null, Boolean waitForExit = true) {
+        public static CommandExecuteResult Start(String commandText, String args,
+            Encoding encoding = null, Boolean quiet = false, String workingDir = null, Boolean waitForExit = true) {
             ProcessStartInfo startInfo = null;
             try {
-                startInfo = GetProcessStartInfo(commandText, args, useCmdExec: false, encoding, workingDir);
+                startInfo = GetProcessStartInfo(commandText, args, false, encoding, workingDir);
             }
             catch (Win32Exception) {
-                startInfo = GetProcessStartInfo(commandText, args, useCmdExec: true, encoding, workingDir);
+                startInfo = GetProcessStartInfo(commandText, args, true, encoding, workingDir);
             }
 
             using var process = Process.Start(startInfo);
@@ -38,10 +38,10 @@ namespace PomeloCli.Plugin.Runtime {
             }
         }
 
-        private static IEnumerable<string> Start(Process p, bool quiet, Encoding encoding) {
+        private static IEnumerable<String> Start(Process p, Boolean quiet, Encoding encoding) {
             var errors = new StringBuilder();
-            var locker = new object();
-            p.ErrorDataReceived += delegate(object sender, DataReceivedEventArgs errorArgs) {
+            var locker = new Object();
+            p.ErrorDataReceived += delegate(Object sender, DataReceivedEventArgs errorArgs) {
                 if (errorArgs.Data != null) {
                     lock (locker) {
                         errors.AppendLine(errorArgs.Data);
@@ -50,7 +50,7 @@ namespace PomeloCli.Plugin.Runtime {
             };
 
             p.BeginErrorReadLine();
-            string s = p.StandardOutput.ReadLine();
+            var s = p.StandardOutput.ReadLine();
             while (s != null) {
                 if (!quiet) {
                     Console.WriteLine(s);
@@ -67,7 +67,7 @@ namespace PomeloCli.Plugin.Runtime {
             }
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(string cmdText, string args, bool useCmdExec, Encoding encoding, String workingDir = null) {
+        private static ProcessStartInfo GetProcessStartInfo(String cmdText, String args, Boolean useCmdExec, Encoding encoding, String workingDir = null) {
             if (encoding == null) {
                 encoding = Encoding.UTF8;
             }
@@ -82,7 +82,7 @@ namespace PomeloCli.Plugin.Runtime {
                 CreateNoWindow = true,
                 StandardOutputEncoding = encoding,
                 StandardInputEncoding = encoding,
-                StandardErrorEncoding = encoding,
+                StandardErrorEncoding = encoding
             };
 
 
@@ -96,7 +96,7 @@ namespace PomeloCli.Plugin.Runtime {
                     ? "/u /c " + cmdText
                     : "/c " + cmdText;
 
-                if (!string.IsNullOrEmpty(args)) {
+                if (!String.IsNullOrEmpty(args)) {
                     arguments += " " + args;
                 }
 
@@ -105,8 +105,8 @@ namespace PomeloCli.Plugin.Runtime {
             else {
                 startInfo.FileName = cmdText;
                 startInfo.Arguments = args;
-                if (string.IsNullOrEmpty(args) && cmdText.Contains(' ') && !File.Exists(cmdText)) {
-                    string[] array = cmdText.Split(" ".ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);
+                if (String.IsNullOrEmpty(args) && cmdText.Contains(' ') && !File.Exists(cmdText)) {
+                    var array = cmdText.Split(" ".ToCharArray(), 2, StringSplitOptions.RemoveEmptyEntries);
                     if (File.Exists(array[0])) {
                         startInfo.FileName = array[0];
                         startInfo.Arguments = array[1];

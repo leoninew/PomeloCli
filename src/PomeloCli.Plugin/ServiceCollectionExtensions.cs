@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PomeloCli.Plugin.Commands;
-using PomeloCli.Plugin.Runtime;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PomeloCli.Plugin.Commands;
+using PomeloCli.Plugin.Runtime;
 
 namespace PomeloCli.Plugin {
     public static class ServiceCollectionExtensions {
@@ -57,7 +57,7 @@ namespace PomeloCli.Plugin {
         private static IServiceCollection Clone(this IServiceCollection services) {
             var clone = new ServiceCollection();
             foreach (var descriptor in services) {
-                ((ICollection<ServiceDescriptor>) clone).Add(descriptor);
+                ((ICollection<ServiceDescriptor>)clone).Add(descriptor);
             }
 
             return clone;

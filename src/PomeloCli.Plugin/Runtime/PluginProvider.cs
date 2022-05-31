@@ -54,18 +54,6 @@ namespace PomeloCli.Plugin.Runtime {
             return pluginCsproj;
         }
 
-        private IEnumerable<XElement> GetPackageElements() {
-            var pluginCsproj = GetPluginCsproj(false);
-            if (File.Exists(pluginCsproj) == false) {
-                return Enumerable.Empty<XElement>();
-            }
-
-            return XDocument.Load(pluginCsproj)
-                .DescendantNodes()
-                .OfType<XElement>()
-                .Where(x => x.Name == "PackageReference");
-        }
-
         public IEnumerable<Plugin> FindAll() {
             var packages = GetPackageElements();
             foreach (var item in packages) {
@@ -97,6 +85,18 @@ namespace PomeloCli.Plugin.Runtime {
                 var pluginCsproj = GetPluginCsproj(true);
                 package.Document.Save(pluginCsproj);
             }
+        }
+
+        private IEnumerable<XElement> GetPackageElements() {
+            var pluginCsproj = GetPluginCsproj(false);
+            if (File.Exists(pluginCsproj) == false) {
+                return Enumerable.Empty<XElement>();
+            }
+
+            return XDocument.Load(pluginCsproj)
+                .DescendantNodes()
+                .OfType<XElement>()
+                .Where(x => x.Name == "PackageReference");
         }
     }
 }

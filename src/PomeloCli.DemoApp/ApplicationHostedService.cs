@@ -4,22 +4,22 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using PomeloCli.DemoApp.Diagnosis;
-using PomeloCli.Plugin;
 using Microsoft.Extensions.CommandLineUtils;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.CommandLine;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PomeloCli.DemoApp.Diagnosis;
+using PomeloCli.Plugin;
 
 namespace PomeloCli.DemoApp {
     class ApplicationHostedService : IHostedService {
-        private readonly ILogger _logger;
-        private readonly IConfiguration _configuration;
         private readonly ICommandService _commandService;
+        private readonly IConfiguration _configuration;
         private readonly CommandLineConfigurationSource _configurationSource;
-        private readonly IPluginResolver _pluginResolver;
         private readonly IDiagnosisService _diagnosisService;
+        private readonly ILogger _logger;
+        private readonly IPluginResolver _pluginResolver;
 
         public ApplicationHostedService(
             ILogger<ApplicationHostedService> logger,
@@ -51,6 +51,10 @@ namespace PomeloCli.DemoApp {
             }
 
             await DiagnosisReportSafelyAsync();
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken) {
+            return Task.CompletedTask;
         }
 
         private void ConfigureGlobalOptions(CommandLineApplication commandApp) {
@@ -113,10 +117,6 @@ namespace PomeloCli.DemoApp {
             catch (Exception ex) {
                 _logger.LogDebug("diagnosis report failed, {Message}", ex.Message);
             }
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken) {
-            return Task.CompletedTask;
         }
     }
 }

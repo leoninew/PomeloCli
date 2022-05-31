@@ -2,7 +2,6 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.CommandLineUtils;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 using Xunit;
 
 namespace PomeloCli.Tests.Commands {

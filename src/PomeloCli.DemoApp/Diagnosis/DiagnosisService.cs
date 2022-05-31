@@ -29,7 +29,7 @@ namespace PomeloCli.DemoApp.Diagnosis {
             var httpClient = _httpClientFactory.CreateClient();
             var url = new Uri(_options.Value.Url);
 
-            var jsonSerializerOptions = new JsonSerializerOptions() {
+            var jsonSerializerOptions = new JsonSerializerOptions {
                 PropertyNameCaseInsensitive = false,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
@@ -49,7 +49,7 @@ namespace PomeloCli.DemoApp.Diagnosis {
         }
 
         protected virtual Object GetDiagnosisContent(DiagnosisMessage message, JsonSerializerOptions jsonSerializerOptions) {
-            return new { Value = JsonSerializer.Serialize(message, jsonSerializerOptions)};
+            return new { Value = JsonSerializer.Serialize(message, jsonSerializerOptions) };
         }
     }
 }

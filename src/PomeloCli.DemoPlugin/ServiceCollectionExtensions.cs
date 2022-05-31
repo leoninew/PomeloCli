@@ -1,11 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using PomeloCli.Commands;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PomeloCli.DemoPlugin.Commands;
 
 namespace PomeloCli.DemoPlugin {
     public static class ServiceCollectionExtensions {
-        public static IServiceCollection ConfigureCommands(this IServiceCollection services) {      
+        public static IServiceCollection ConfigureCommands(this IServiceCollection services) {
             services.AddTransient<ICommand, EchoCommand>();
             services.AddTransient<ICommand, DockerCommand>();
             services.AddTransient<ICommand, DockerPsCommand>();

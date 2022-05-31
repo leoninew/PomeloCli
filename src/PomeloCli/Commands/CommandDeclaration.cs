@@ -7,7 +7,7 @@ namespace PomeloCli.Commands {
             Description = description;
         }
 
-        public String Name { get; private set; }
-        public String Description { get; private set; }
+        public String Name { get; }
+        public String Description { get; }
     }
 }

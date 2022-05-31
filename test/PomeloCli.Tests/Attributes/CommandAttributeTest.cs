@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using PomeloCli.Attributes;
@@ -6,7 +5,6 @@ using Xunit;
 
 namespace PomeloCli.Tests.Attributes {
     public class CommandAttributeTest {
-        
         [Fact]
         public void Validate_ShouldFail_ApplyInvalidName() {
             var commandAttr = typeof(InvalidCommand2).GetCustomAttribute<CommandAttribute>();
@@ -42,7 +40,7 @@ namespace PomeloCli.Tests.Attributes {
     [Command("test")]
     class ChildCommand : Command<ParentCommand> {
     }
-    
+
     [Command("123")]
     class InvalidCommand2 {
     }

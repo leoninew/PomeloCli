@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using PomeloCli.Attributes;
@@ -32,6 +29,7 @@ namespace PomeloCli.Commands {
             if (asyncCommand == null) {
                 throw new InvalidProgramException();
             }
+
             return asyncCommand.ExecuteAsync();
         }
 

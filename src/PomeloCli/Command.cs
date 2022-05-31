@@ -9,18 +9,15 @@ using PomeloCli.Commands;
 namespace PomeloCli {
     public abstract class Command : ICommand {
         private const String DefaultHelpOption = "-?|-h|--help";
-        private readonly ICommandContainer _commandContainer;
 
         protected Command() {
-            _commandContainer = new CommandContainer();
+            CommandContainer = new CommandContainer();
         }
 
-        public ICommandContainer CommandContainer {
-            get { return _commandContainer; }
-        }
+        public ICommandContainer CommandContainer { get; }
 
         public void Configure(CommandLineApplication cmdApp) {
-            _commandContainer.SetApplication(cmdApp);
+            CommandContainer.SetApplication(cmdApp);
             ConfigureHelp(cmdApp);
             ConfigureCommand(cmdApp);
             ConfigureArguments(cmdApp);
@@ -29,7 +26,7 @@ namespace PomeloCli {
 
         public virtual Int32 Execute() {
             return 0;
-        }        
+        }
 
         private void ConfigureHelp(CommandLineApplication cmdApp) {
             cmdApp.HelpOption(DeclareHelp() ?? DefaultHelpOption);

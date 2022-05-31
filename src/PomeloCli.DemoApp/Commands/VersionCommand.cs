@@ -1,6 +1,5 @@
 ﻿using System;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 using PomeloCli.DemoApp.Diagnosis;
 
 namespace PomeloCli.DemoApp.Commands {

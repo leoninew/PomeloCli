@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Extensions.CommandLineUtils;
 using PomeloCli.Attributes;
-using PomeloCli.Commands;
 
 namespace PomeloCli.Tests.Commands {
     [Command("echo")]
@@ -12,7 +11,7 @@ namespace PomeloCli.Tests.Commands {
         [CommandOption("-n|--newline", CommandOptionType.NoValue, Description = "do not output the trailing newline")]
         public Boolean Newline { get; set; }
 
-        public override int Execute() {
+        public override Int32 Execute() {
             if (Newline) {
                 Console.Write(Input);
             }

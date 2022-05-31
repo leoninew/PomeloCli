@@ -35,12 +35,12 @@ namespace PomeloCli.Plugin.Runtime {
 
             CommandExecutor.Start("dotnet", String.Join(' ', args), workingDir: workingDir);
         }
-        
+
         public static void ListPackage(String source, String workingDir) {
             var args = new List<String>();
             args.Add("list");
             args.Add("package");
-            
+
             if (source != null) {
                 args.Add("-s");
                 args.Add(source);

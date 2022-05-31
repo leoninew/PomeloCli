@@ -9,6 +9,7 @@ namespace PomeloCli.DemoApp.Diagnosis {
             if (String.IsNullOrWhiteSpace(text)) {
                 return null;
             }
+
             return Version.Parse(text);
         }
 

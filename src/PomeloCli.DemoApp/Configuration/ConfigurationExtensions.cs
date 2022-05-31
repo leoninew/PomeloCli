@@ -4,47 +4,37 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
-namespace PomeloCli.DemoApp.Configuration
-{
-    public static class ConfigurationExtensions
-    {
-        public static JObject AsJson(this IConfiguration configuration)
-        {
+namespace PomeloCli.DemoApp.Configuration {
+    public static class ConfigurationExtensions {
+        public static JObject AsJson(this IConfiguration configuration) {
             var jobject = new JObject();
-            foreach (var section in configuration.GetChildren())
-            {
+            foreach (var section in configuration.GetChildren()) {
                 AsJsonProperty(section, jobject);
             }
 
             return jobject;
         }
 
-        private static void AsJsonProperty(IConfigurationSection section, JObject jobject)
-        {
-            if (section.Value == null)
-            {
+        private static void AsJsonProperty(IConfigurationSection section, JObject jobject) {
+            if (section.Value == null) {
                 // 重要: 注意引用关系, 不可拆分
                 jobject.Add(section.Key, jobject = new JObject());
-                foreach (var children in section.GetChildren())
-                {
+                foreach (var children in section.GetChildren()) {
                     AsJsonProperty(children, jobject);
                 }
             }
-            else
-            {
+            else {
                 jobject.Add(section.Key, section.Value);
             }
         }
 
-        public static IEnumerable<KeyValuePair<String, String>> AsEnumerablePairs(this IConfiguration configuration)
-        {
+        public static IEnumerable<KeyValuePair<String, String>> AsEnumerablePairs(this IConfiguration configuration) {
             return configuration.AsEnumerable(false).Where(x => x.Value != null);
         }
 
-        public static IConfigurationBuilder AddApplicationProfile(this IConfigurationBuilder builder)
-        {
+        public static IConfigurationBuilder AddApplicationProfile(this IConfigurationBuilder builder) {
             // builder.AddInMemoryCollection(ApplicationProfile.GetConfiguration().AsEnumerablePairs());
-            builder.AddJsonFile(ApplicationProfile.GetConfigurationFile(), optional: true);
+            builder.AddJsonFile(ApplicationProfile.GetConfigurationFile(), true);
             return builder;
         }
     }
