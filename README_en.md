@@ -316,6 +316,23 @@ You can see that pomelo cli has some built-in commands.
 pomelo-cli comes with a built-in set of plugins that contain management commands for other plugins.
 
 ```bash
+$ pomelo-cli plugin --help
+Usage: PomeloCli.Host plugin [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  install
+  list
+  uninstall
+
+Run 'plugin [command] -?|-h|--help' for more information about a command.
+```
+
+We use `plugin install` for SamplePlugin released before.
+
+```bash
 $ pomelo-cli plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]

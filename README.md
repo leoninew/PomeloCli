@@ -317,6 +317,23 @@ Run 'PomeloCli.Host [command] -?|-h|--help' for more information about a command
 pomelo-cli 内置了一组插件，包含了其他插件的管理命令
 
 ```bash
+$ pomelo-cli plugin --help
+Usage: PomeloCli.Host plugin [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  install
+  list
+  uninstall
+
+Run 'plugin [command] -?|-h|--help' for more information about a command.
+```
+
+我们用 `plugin install` 命令安装刚刚发布的插件 SamplePlugin 
+
+```bash
 $ pomelo-cli plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]
