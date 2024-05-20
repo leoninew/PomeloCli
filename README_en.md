@@ -1,7 +1,7 @@
 # What Is PomeloCli
 
-- [中文版](./README_zh.md)
-- [English version](./README.md)
+- [中文版](./README.md)
+- [English version](./README_en.md)
 
 We already have a considerable number of command-line implementation or resolution class libraries, and PomeloCli is not an alternative version, it is based on the outstanding work of [Nate McMaster] (https://github.com/natemcmaster), including [CommandLineUtils] (https://github.com/natemcmaster/CommandLineUtils), and [DotNetCorePlugins] (https://github.com/natemcmaster/DotNetCorePlugins). PomeloCli implemented a solution for command line tool development, management, and maintenance. Especially thanks to Nate.
 
@@ -258,11 +258,11 @@ public static class ServiceCollectionExtensions
 }
 ```
 
-To make plugin works, we also need to add dependencies to the nupkg file while packaging. This requires update the csproj add package parts as [SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，Which could found at [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
+To make plugin works, we also need to add dependencies to the nupkg file while packaging. This requires update the csproj add package parts as [docs/sample/4-sample-plugin/SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，Which could found at [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
 
 ### Build a private nuget service
 
-In order to host our tools and plugins, we use [BaGet] (https://github.com/loic-sharma/ BaGet) to build a lightweight nuget service.
+In order to host our tools and plugins, we use [BaGet](https://github.com/loic-sharma/BaGet) to build a lightweight nuget service.
 
 ```yaml
 version: "3.3"
