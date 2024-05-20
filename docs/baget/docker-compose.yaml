@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  baget:
+    image: loicsharma/baget
+    container_name: baget
+    ports:
+      - "8000:80"
+    volumes:
+      - $PWD/data:/var/baget

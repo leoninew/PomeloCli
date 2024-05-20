@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>pomelo-cli</ToolCommandName>
+    <TargetFrameworks>net8.0;net6.0;netcoreapp3.1;</TargetFrameworks>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<RepositoryUrl>https://github.com/leoninew/PomeloCli</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\PomeloCli.Plugins\PomeloCli.Plugins.csproj" />
+    <ProjectReference Include="..\..\src\PomeloCli\PomeloCli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="" />
+		<None Include="../../LICENSE.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+</Project>

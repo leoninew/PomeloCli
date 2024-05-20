@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "PomeloCli": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PomeloCli.Host_PROFILE_DIR": "",
+        "PomeloCli.Host_PLUGIN_IGNORE": "false"
+      },
+      "commandLineArgs": "plugin list"
+    }
+  }
+}

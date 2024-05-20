@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\PomeloCli\PomeloCli.csproj" />
+  </ItemGroup>
+
+  <!-- How to include package reference files in your nuget -->
+  <!--
+	https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package -->
+  <Target Name="AddPackDependencies"
+    Inputs="@(RuntimeCopyLocalItems)"
+    Outputs="%(RuntimeCopyLocalItems.NuGetPackageId)"
+    DependsOnTargets="ResolvePackageAssets"
+    BeforeTargets="GenerateNuspec"
+    AfterTargets="ResolvePackageAssets">
+
+    <!-- Extract NuGetPackageId from RuntimeCopyLocalItems -->
+    <ItemGroup>
+      <NuGetPackageId Include="@(RuntimeCopyLocalItems -> '%(NuGetPackageId)')" />
+    </ItemGroup>
+
+    <!-- Deduplicate NuGetPackageId -->
+    <PropertyGroup>
+      <NuGetPackageId>@(NuGetPackageId -&gt; Distinct())</NuGetPackageId>
+    </PropertyGroup>
+
+    <!-- Create PackageReferenceDependency -->
+    <ItemGroup>
+      <PackageReferenceDependency
+        Include="@(PackageReference -&gt; WithMetadataValue('Identity', '$(NuGetPackageId)'))" />
+    </ItemGroup>
+
+    <!-- Extract NuGetPackagePack from PackageReferenceDependency -->
+    <PropertyGroup>
+      <NuGetPackagePack>@(PackageReferenceDependency -> '%(Pack)')</NuGetPackagePack>
+    </PropertyGroup>
+
+    <!-- Package files if NuGetPackagePack is true -->
+    <ItemGroup Condition="'$(NuGetPackagePack)' == 'true'">
+      <_PackageFiles Include="@(RuntimeCopyLocalItems)"
+        PackagePath="$(BuildOutputTargetFolder)/$(TargetFramework)/%(Filename)%(Extension)" />
+      <RuntimeCopyLocalItems Update="@(RuntimeCopyLocalItems)" CopyLocal="true" Private="true" />
+      <ResolvedFileToPublish Include="@(RuntimeCopyLocalItems)"
+        CopyToPublishDirectory="PreserveNewest" RelativePath="%(Filename)%(Extension)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
