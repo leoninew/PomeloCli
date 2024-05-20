@@ -1,5 +1,8 @@
 # PomeloCli 是什么
 
+- [中文版](./README.md)
+- [English version](./README_en.md)
+
 我们已经有相当多的命令行工具实现或解析类库，PomeloCli 并不是替代版本，它基于 [Nate McMaster](https://github.com/natemcmaster) 的杰出工作 [CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils)、[DotNetCorePlugins](https://github.com/natemcmaster/DotNetCorePlugins) 实现了一整套的命令行开发、管理、维护方案，在此特别鸣谢 Nate。
 
 # 为什么实现
@@ -256,11 +259,11 @@ public static class ServiceCollectionExtensions
 }
 ```
 
-为了能够使得插件运行起来，我们还需要在打包时将依赖添加到 nupkg 文件中。为此需要修改 csproj 添加打包配置，参考 [SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，相关原理见出处 [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
+为了能够使得插件运行起来，我们还需要在打包时将依赖添加到 nupkg 文件中。为此需要修改 csproj 添加打包配置，参考 [docs/sample/4-sample-plugin/SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，相关原理见出处 [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
 
 ### 搭建私有 nuget 服务
 
-为了托管我们的工具与插件，我们这里使用 [BaGet])(https://github.com/loic-sharma/BaGet) 搭建轻量的 nuget 服务，docker-compose.yaml 已经提供见 [baget](docs/baget)，docker 等工具使用请自行查阅。
+为了托管我们的工具与插件，我们这里使用 [BaGet](https://github.com/loic-sharma/BaGet) 搭建轻量的 nuget 服务，docker-compose.yaml 已经提供见 [baget](docs/baget)。docker 等工具使用请自行查阅。
 
 ```yaml
 version: "3.3"
@@ -295,7 +298,7 @@ pomelo-cli 是一个 dotnet tool 应用，可以看作命令行宿主，它包�
 我们使用标准的 dotnet tool CLI 命令安装 PomeloCli，相关参考见 [How to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
 
 ```bash
-$ dotnet tool install PomeloCli.Host --version 1.3.0 -g --add-source http://localhost:8000/v3/index.json
+$ dotnet tool install PomeloCli.Host --version 1.3.0 -g
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]
 
@@ -315,6 +318,23 @@ Run 'PomeloCli.Host [command] -?|-h|--help' for more information about a command
 ### 集成命令行插件
 
 pomelo-cli 内置了一组插件，包含了其他插件的管理命令
+
+```bash
+$ pomelo-cli plugin --help
+Usage: PomeloCli.Host plugin [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  install
+  list
+  uninstall
+
+Run 'plugin [command] -?|-h|--help' for more information about a command.
+```
+
+我们用 `plugin install` 命令安装刚刚发布的插件 SamplePlugin 
 
 ```bash
 $ pomelo-cli plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json

@@ -1,4 +1,7 @@
-# PomeloCli 是什么
+# What Is PomeloCli
+
+- [中文版](./README.md)
+- [English version](./README_en.md)
 
 We already have a considerable number of command-line implementation or resolution class libraries, and PomeloCli is not an alternative version, it is based on the outstanding work of [Nate McMaster] (https://github.com/natemcmaster), including [CommandLineUtils] (https://github.com/natemcmaster/CommandLineUtils), and [DotNetCorePlugins] (https://github.com/natemcmaster/DotNetCorePlugins). PomeloCli implemented a solution for command line tool development, management, and maintenance. Especially thanks to Nate.
 
@@ -32,7 +35,7 @@ Reference PomeloCli to quickly create your own command line application
 ```bash
 $ dotnet new console -n SampleApp
 $ cd SampleApp
-$ dotnet add package PomeloCli -v 1.3.0 -s http://localhost:8000/v3/index.json
+$ dotnet add package PomeloCli -v 1.3.0
 ```
 
 Add the necessary processing logic in the input program，see [docs/sample/3-sample-app/Program.cs](docs/sample/3-sample-app/Program.cs). We use dependence injection for command management, for reference see [.NET dependency injection] (https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection).
@@ -255,11 +258,11 @@ public static class ServiceCollectionExtensions
 }
 ```
 
-To make plugin works, we also need to add dependencies to the nupkg file while packaging. This requires update the csproj add package parts as [SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，Which could found at [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
+To make plugin works, we also need to add dependencies to the nupkg file while packaging. This requires update the csproj add package parts as [docs/sample/4-sample-plugin/SamplePlugin.csproj](docs/sample/4-sample-plugin/SamplePlugin.csproj)，Which could found at [How to include package reference files in your nuget](https://til.cazzulino.com/msbuild/how-to-include-package-reference-files-in-your-nuget-package)
 
 ### Build a private nuget service
 
-In order to host our tools and plugins, we use [BaGet] (https://github.com/loic-sharma/ BaGet) to build a lightweight nuget service.
+In order to host our tools and plugins, we use [BaGet](https://github.com/loic-sharma/BaGet) to build a lightweight nuget service.
 
 ```yaml
 version: "3.3"
@@ -294,7 +297,7 @@ pomelo-cli is a dotnet tool application that can be viewed as a command line hos
 We use standard dotnet tool CLI command to install PomeloCli, which could find on [How to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
 
 ```bash
-$ dotnet tool install PomeloCli.Host --version 1.3.0 -g --add-source http://localhost:8000/v3/index.json
+$ dotnet tool install PomeloCli.Host --version 1.3.0 -g
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]
 
@@ -314,6 +317,23 @@ You can see that pomelo cli has some built-in commands.
 ### Integrate command line plugin
 
 pomelo-cli comes with a built-in set of plugins that contain management commands for other plugins.
+
+```bash
+$ pomelo-cli plugin --help
+Usage: PomeloCli.Host plugin [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  install
+  list
+  uninstall
+
+Run 'plugin [command] -?|-h|--help' for more information about a command.
+```
+
+We use `plugin install` for SamplePlugin released before.
 
 ```bash
 $ pomelo-cli plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json
