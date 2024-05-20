@@ -1,5 +1,8 @@
 # PomeloCli 是什么
 
+- [中文版](./README_zh.md)
+- [English version](./README.md)
+
 我们已经有相当多的命令行工具实现或解析类库，PomeloCli 并不是替代版本，它基于 [Nate McMaster](https://github.com/natemcmaster) 的杰出工作 [CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils)、[DotNetCorePlugins](https://github.com/natemcmaster/DotNetCorePlugins) 实现了一整套的命令行开发、管理、维护方案，在此特别鸣谢 Nate。
 
 # 为什么实现
