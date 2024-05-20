@@ -32,7 +32,7 @@ Reference PomeloCli to quickly create your own command line application
 ```bash
 $ dotnet new console -n SampleApp
 $ cd SampleApp
-$ dotnet add package PomeloCli -v 1.3.0 -s http://localhost:8000/v3/index.json
+$ dotnet add package PomeloCli -v 1.3.0
 ```
 
 Add the necessary processing logic in the input program，see [docs/sample/3-sample-app/Program.cs](docs/sample/3-sample-app/Program.cs). We use dependence injection for command management, for reference see [.NET dependency injection] (https://learn.microsoft.com/en-us/dotnet/core/extensions/dependency-injection).
@@ -294,7 +294,7 @@ pomelo-cli is a dotnet tool application that can be viewed as a command line hos
 We use standard dotnet tool CLI command to install PomeloCli, which could find on [How to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
 
 ```bash
-$ dotnet tool install PomeloCli.Host --version 1.3.0 -g --add-source http://localhost:8000/v3/index.json
+$ dotnet tool install PomeloCli.Host --version 1.3.0 -g
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]
 

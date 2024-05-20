@@ -295,7 +295,7 @@ pomelo-cli 是一个 dotnet tool 应用，可以看作命令行宿主，它包�
 我们使用标准的 dotnet tool CLI 命令安装 PomeloCli，相关参考见 [How to manage .NET tools](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools)
 
 ```bash
-$ dotnet tool install PomeloCli.Host --version 1.3.0 -g --add-source http://localhost:8000/v3/index.json
+$ dotnet tool install PomeloCli.Host --version 1.3.0 -g
 $ pomelo-cli --help
 Usage: PomeloCli.Host [command] [options]
 
