@@ -1,3 +1,5 @@
+[TOC]
+
 # What Is PomeloCli
 
 - [中文版](./README.md)
@@ -392,12 +394,38 @@ $ dotnet new console -n SampleHost
 $ cd SampleHost/
 $ dotnet add package PomeloCli
 $ dotnet add package PomeloCli.Plugins
-$ dotnet build
 ```
+
+Replace Program.cs with the following content
+
+```c#
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using PomeloCli;
+using PomeloCli.Plugins;
+
+class Program
+{
+    static async Task<int> Main(string[] args)
+    {
+        var services = new ServiceCollection()
+            .AddPluginSupport()
+            .BuildServiceProvider();
+
+        var applicationFactory = new ApplicationFactory(services);
+        var application = applicationFactory.ConstructRootApp();
+
+        return await application.ExecuteAsync(args);
+    }
+}
+```
+
 
 Now you have a command-line host that you can run and even use to install plugins
 
 ```bash
+$ dotnet build
 $ ./bin/Debug/net8.0/SampleHost.exe --help
 Usage: SampleHost [command] [options]
 
@@ -426,7 +454,7 @@ Commands:
 Run 'SampleHost [command] -?|-h|--help' for more information about a command.
 ```
 
-### Others: handle error NU1102
+## Others: handle error NU1102
 
 When the installation of the plugin fails for code **NU1102** which indicates that the corresponding version not found, you can execute the command ` dotnet nuget locals http-cache --clear` clearing the http cache and install again to fix the issue.
 

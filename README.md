@@ -1,3 +1,5 @@
+[TOC]
+
 # PomeloCli 是什么
 
 - [中文版](./README.md)
@@ -394,12 +396,37 @@ $ dotnet new console -n SampleHost
 $ cd SampleHost/
 $ dotnet add package PomeloCli
 $ dotnet add package PomeloCli.Plugins
-$ dotnet build
+```
+
+修改 Program.cs 替换为以下内容
+
+```none
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using PomeloCli;
+using PomeloCli.Plugins;
+
+class Program
+{
+    static async Task<int> Main(string[] args)
+    {
+        var services = new ServiceCollection()
+            .AddPluginSupport()
+            .BuildServiceProvider();
+
+        var applicationFactory = new ApplicationFactory(services);
+        var application = applicationFactory.ConstructRootApp();
+
+        return await application.ExecuteAsync(args);
+    }
+}
 ```
 
 现在你得到了一个命令宿主，你可以运行它，甚至用它安装插件
 
 ```bash
+$ dotnet build
 $ ./bin/Debug/net8.0/SampleHost.exe --help
 Usage: SampleHost [command] [options]
 
@@ -428,7 +455,7 @@ Commands:
 Run 'SampleHost [command] -?|-h|--help' for more information about a command.
 ```
 
-### 其他：异常 NU1102 的处理
+## 其他：异常 NU1102 的处理
 
 当安装插件失败且错误码是**NU1102** 时，表示未找到对应版本，可以执行命令 `$ dotnet nuget locals http-cache --clear` 以清理 HTTP 缓存。
 
