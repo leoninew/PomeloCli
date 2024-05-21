@@ -28,7 +28,7 @@
 
 你可以直接开始，但是在此之前理解命令、参数和选项仍然有很大的帮助。相关内容可以参考 [Introduction](https://natemcmaster.github.io/CommandLineUtils/docs/intro.html).
 
-## 引用 PomeloCli 开发命令行应用
+## 1. 引用 PomeloCli 开发命令行应用
 
 引用 PomeloCli 来快速创建自己的命令行应用
 
@@ -194,7 +194,7 @@ Options:
 
 BRAVO 很简单对吧。
 
-## 引用 PomeloCli 开发命令行插件
+## 2. 引用 PomeloCli 开发命令行插件
 
 如果只是提供命令行应用的创建能力，作者大可不必发布这样一个项目，因为 [McMaster.Extensions.CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils)  本身已经做得足够好了。如上文"为什么实现章节"所说，作者还希望解决命令行工具的分发维护问题。
 
@@ -213,7 +213,7 @@ BRAVO 很简单对吧。
 
 ![image-20240519212733969](assets/image-20240519212733969.png)
 
-通过将宿主的维护交由 dotnet tool 处理、交插件的维护交由宿主处理，我们希望解决命令行工具的分发维护问题：
+通过将宿主的维护交由 dotnet tool 处理、将插件的维护交由宿主处理，我们希望解决命令行工具的分发维护问题：
 
 - 开发人员
   - 开发插件
@@ -289,7 +289,7 @@ $ dotnet pack -o nupkgs -c Debug
 $ dotnet nuget push -s http://localhost:8000/v3/index.json nupkgs/SamplePlugin.1.0.0.nupkg
 ```
 
-## 使用 PomeloCli  集成已发布插件
+## 3. 使用 PomeloCli  集成已发布插件
 
 pomelo-cli 是一个 dotnet tool 应用，可以看作命令行宿主，它包含了一组 plugin 命令用来管理我们的命令行插件。
 
@@ -385,9 +385,48 @@ $ pomelo-cli plugin uninstall SamplePlugin
 $ dotnet tool uninstall PomeloCli.Host -g
 ```
 
-## 引用 PomeloCli 开发命令行宿主
+## 4. 引用 PomeloCli 开发命令行宿主
 
-TODO:
+你可能需要自己的命令行宿主，这也很容易。
+
+```bash
+$ dotnet new console -n SampleHost
+$ cd SampleHost/
+$ dotnet add package PomeloCli
+$ dotnet add package PomeloCli.Plugins
+$ dotnet build
+```
+
+现在你得到了一个命令宿主，你可以运行它，甚至用它安装插件
+
+```bash
+$ ./bin/Debug/net8.0/SampleHost.exe --help
+Usage: SampleHost [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  plugin
+
+Run 'SampleHost [command] -?|-h|--help' for more information about a command.
+
+$ ./bin/Debug/net8.0/SampleHost.exe plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json
+...
+
+$ ./bin/Debug/net8.0/SampleHost.exe --help
+Usage: SampleHost [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  echo          display a line of text
+  head          Print the first 10 lines of each FILE to standard output
+  plugin
+
+Run 'SampleHost [command] -?|-h|--help' for more information about a command.
+```
 
 ### 其他：异常 NU1102 的处理
 
