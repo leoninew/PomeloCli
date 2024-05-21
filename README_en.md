@@ -1,3 +1,5 @@
+[TOC]
+
 # What Is PomeloCli
 
 - [中文版](./README.md)
@@ -28,7 +30,7 @@ The tool has been developed and needs to be deployed to the computing node, but 
 
 You can start right away, but understanding command, parameter and option before is still very helpful, which could found on [Introduction](https://natemcmaster.github.io/CommandLineUtils/docs/intro.html)
 
-## Reference PomeloCli Development Command Line Application
+## 1. Reference PomeloCli Develop Command Line Application
 
 Reference PomeloCli to quickly create your own command line application
 
@@ -193,7 +195,7 @@ Options:
 
 BRAVO, it is simple. Right?
 
-## Reference PomeloCli Development Command Line Plugin
+## 2. Reference PomeloCli Develop Command Line Plugin
 
 If just create command-line applications provided above, we don't have to publish such a project, because [CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils) has done enough. As explained in the "Why It" chapter, we want to resolve issues  for command-line tools distribution and maintenance.
 
@@ -223,7 +225,7 @@ We want to solve the distribution maintenance problem of command line tools by h
 
 Now we're going to develop a plugin project.
 
-## Development Command Line Plugin
+## Develop Command Line Plugin
 
 Reference PomeloCli to create your own command line plugin
 
@@ -288,7 +290,7 @@ $ dotnet pack -o nupkgs -c Debug
 $ dotnet nuget push -s http://localhost:8000/v3/index.json nupkgs/SamplePlugin.1.0.0.nupkg
 ```
 
-## Using PomeloCli to integrate published plugins
+## 3. Using PomeloCli to integrate published plugins
 
 pomelo-cli is a dotnet tool application that can be viewed as a command line host and contains a set of plugin commands to manage our command line plugins.
 
@@ -383,7 +385,76 @@ We use standard dotnet tool CLI command to uninstall PomeloCli.
 $ dotnet tool uninstall PomeloCli.Host -g
 ```
 
-### Others: handle error NU1102
+## 4. Reference PomeloCli Develop Command Line Host
+
+You may need your own command-line host, which is also easy.
+
+```bash
+$ dotnet new console -n SampleHost
+$ cd SampleHost/
+$ dotnet add package PomeloCli
+$ dotnet add package PomeloCli.Plugins
+```
+
+Replace Program.cs with the following content
+
+```c#
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using PomeloCli;
+using PomeloCli.Plugins;
+
+class Program
+{
+    static async Task<int> Main(string[] args)
+    {
+        var services = new ServiceCollection()
+            .AddPluginSupport()
+            .BuildServiceProvider();
+
+        var applicationFactory = new ApplicationFactory(services);
+        var application = applicationFactory.ConstructRootApp();
+
+        return await application.ExecuteAsync(args);
+    }
+}
+```
+
+
+Now you have a command-line host that you can run and even use to install plugins
+
+```bash
+$ dotnet build
+$ ./bin/Debug/net8.0/SampleHost.exe --help
+Usage: SampleHost [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  plugin
+
+Run 'SampleHost [command] -?|-h|--help' for more information about a command.
+
+$ ./bin/Debug/net8.0/SampleHost.exe plugin install SamplePlugin -v 1.0.0 -s http://localhost:8000/v3/index.json
+...
+
+$ ./bin/Debug/net8.0/SampleHost.exe --help
+Usage: SampleHost [command] [options]
+
+Options:
+  -?|-h|--help  Show help information.
+
+Commands:
+  echo          display a line of text
+  head          Print the first 10 lines of each FILE to standard output
+  plugin
+
+Run 'SampleHost [command] -?|-h|--help' for more information about a command.
+```
+
+## Others: handle error NU1102
 
 When the installation of the plugin fails for code **NU1102** which indicates that the corresponding version not found, you can execute the command ` dotnet nuget locals http-cache --clear` clearing the http cache and install again to fix the issue.
 
