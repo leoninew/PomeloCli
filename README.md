@@ -138,37 +138,10 @@ class HeadCommand : Command
 }
 ```
 
-进入目录 SampleApp 后，既可以通过 `dotnet run -- --help` 查看包含的 `echo` 和 `head` 命令及使用说明。
+进入目录 SampleApp 后，既可以编译使用可执行的 SampleApp.exe 查看包含的 `echo` 和 `head` 命令及使用说明，也可以通过 `dotnet run` 达到相同效果。
 
 ```bash
-$ dotnet run -- --help
-Usage: SampleApp [command] [options]
-
-Options:
-  -?|-h|--help  Show help information.
-
-Commands:
-  echo          display a line of text
-  head          Print the first 10 lines of each FILE to standard output
-
-Run 'SampleApp [command] -?|-h|--help' for more information about a command.
-
-$ dotnet run -- echo --help
-display a line of text
-
-Usage: SampleApp echo [options] <input>
-
-Arguments:
-  input
-
-Options:
-  -n|--newline  do not output the trailing newline
-  -?|-h|--help  Show help information.
-```
-
-也可以编译使用可执行的 SampleApp.exe 。
-
-```bash
+$ dotnet build
 $ ./bin/Debug/net8.0/SampleApp.exe --help
 Usage: SampleApp [command] [options]
 
@@ -476,6 +449,7 @@ error: Package 'SamplePlugin' is incompatible with 'user specified' frameworks i
 
 ## 路线图
 
-- 业务插件配置
+- 更多的文档和高级用法
+- 业务插件专有的配置生成
 
 项目仍然在开发中，欢迎与我交流想法

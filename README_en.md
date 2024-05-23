@@ -137,37 +137,10 @@ class HeadCommand : Command
 }
 ```
 
-After entering the directory SampleApp, you can view the 'echo' and 'head' commands and instructions contained in `dotnet run --help`. 
+In the SampleApp directory , you can compile then execute the SampleApp.exe then view the 'echo' and 'head' commands and instructions, via`dotnet run --help` is also OK.
 
 ```bash
-$ dotnet run -- --help
-Usage: SampleApp [command] [options]
-
-Options:
-  -?|-h|--help  Show help information.
-
-Commands:
-  echo          display a line of text
-  head          Print the first 10 lines of each FILE to standard output
-
-Run 'SampleApp [command] -?|-h|--help' for more information about a command.
-
-$ dotnet run -- echo --help
-display a line of text
-
-Usage: SampleApp echo [options] <input>
-
-Arguments:
-  input
-
-Options:
-  -n|--newline  do not output the trailing newline
-  -?|-h|--help  Show help information.
-```
-
-Compile then execute the SampleApp.exe is also OK.
-
-```bash
+$ dotnet build
 $ ./bin/Debug/net8.0/SampleApp.exe --help
 Usage: SampleApp [command] [options]
 
@@ -466,10 +439,6 @@ error: NU1102: Unable to find package SamplePlugin with version (>= 1.1.0)
 error:   - Found 7 version(s) in http://localhost:8000/v3/index.json [ Nearest version: 1.0.0 ]
 error: Package 'SamplePlugin' is incompatible with 'user specified' frameworks in project 'C:\Users\leon\.PomeloCli.Host\Plugin.csproj'.
 ```
-
-## Development Command Line Host
-
-TODO:
 
 # Other stuffs
 
